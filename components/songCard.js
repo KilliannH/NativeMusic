@@ -4,12 +4,12 @@ import { TouchableOpacity, Text, View, Image, StyleSheet } from 'react-native';
 
 const SongCard = ({song, navigation}) => {
   return (
-  <TouchableOpacity style={{backgroundColor: 'transparent'}}>
+  <TouchableOpacity style={{backgroundColor: 'transparent'}} onPress={() => navigation.navigate('Player', song._id)}>
     <View style={styles.listItemContainer}>
       <Image source={{uri: song.album_img}} style={styles.albumImage}/>
       <View style={styles.songInfos}>
         <Text>{song.artist}</Text>
-        <Text>{song.title}</Text>
+        <Text style={styles.itemHeader}>{song.title}</Text>
       </View>
     </View>
   </TouchableOpacity>
@@ -28,8 +28,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10
   },
   itemHeader: {
-    color: '#fff',
-    fontSize: 20,
+    fontSize: 15,
   },
   albumImage: {
     backgroundColor: 'transparent',
