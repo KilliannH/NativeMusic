@@ -1,19 +1,13 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
 
-export default class DetailsScreen extends React.Component {
+const DetailsScreen = ({route}) => {
 
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+  return (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text>Details Screen</Text>
+    </View>
+  );
+};
 
-  render() {
-    const { route } = this.props;
-    return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <Text>Details Screen</Text>
-      </View>
-    );
-  }
-}
+export default DetailsScreen;

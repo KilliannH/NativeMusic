@@ -1,61 +1,64 @@
-import * as React from 'react';
-import {View, Text, Button, FlatList, ActivityIndicator} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, FlatList, ActivityIndicator} from 'react-native';
 import * as dataService from '../services/DataService';
 import SongCard from '../components/songCard';
 
 import globalStyles from '../constants/globalStyles';
 
-export default class HomeScreen extends React.Component {
+const HomeScreen = ({navigation}) => {
 
-  state = {
-    songList: [],
-    loading: true
-  }
+  const [songList, setSongList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  componentDidMount() {
+  const componentDidMount = () => {
     console.log('did mount');
     dataService.getAllSongs().then((songs) => {
-      this.setState({songList: songs, loading: false});
+      setSongList(songs);
+      setLoading(false);
     }).catch((e) => console.error(e));
-  }
+  };
 
-  componentWillUnmount() {
-    this.setState({songList: [], loading: true});
-  }
+  const componentWillUnmount = () => {
+    setSongList([]);
+    setLoading(true);
+  };
 
-  render() {
-    //Destruct songList and Loading from state.
-    const {songList, loading} = this.state;
-    const {navigation} = this.props;
-    //If laoding to false, return a FlatList which will have data, renderItem, and keyExtractor props used.
-    //Data contains the data being  mapped over.
-    //RenderItem a callback return UI for each item.
-    //keyExtractor used to give a unique identifier for each item.
-    if (!loading) {
-      return (
-        <>
-          <View style={{
-            flexDirection: "row",
-            height: 80,
-            padding: 20,
-          }}>
-            <Text style={globalStyles.titleText}>All Songs</Text>
-          </View>
-          <View style={{
-            flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-          }}>
-            <FlatList
-              data={songList}
-              renderItem={(data) => <SongCard song={data.item} navigation={navigation} />}
-              keyExtractor={(item) => item._id}
-            />
-          </View>
-        </>
-      );
-    } else {
-      return <ActivityIndicator />;
-    }
+  useEffect(() => {
+    console.log('use effect fired');
+    componentDidMount();
+    return (
+      componentWillUnmount()
+    );
+  }, []);
+  // if homeScreen were a nested Component and soundlist (the datasource) were a property of that component
+  // we would added [songList] as a dependancy to tell React that we want to fire this hook only of songList had changed.
+
+  if (!loading) {
+    return (
+      <>
+        <View style={{
+          flexDirection: "row",
+          height: 80,
+          padding: 20,
+        }}>
+          <Text style={globalStyles.titleText}>All Songs</Text>
+        </View>
+        <View style={{
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+        }}>
+          <FlatList
+            data={songList}
+            renderItem={(data) => <SongCard song={data.item} navigation={navigation} />}
+            keyExtractor={(item) => item._id}
+          />
+        </View>
+      </>
+    );
+  } else {
+    return <ActivityIndicator />;
   }
-}
+};
+
+export default HomeScreen;

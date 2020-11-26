@@ -1,21 +1,16 @@
-import * as React from 'react';
-import { View, Text, Button } from 'react-native';
+import React from 'react';
+import { Text } from 'react-native';
 import * as dataService from '../services/DataService';
 
 import globalStyles from '../constants/globalStyles';
 
-export default class PlayerScreen extends React.Component {
+const PlayerScreen = () => {
 
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+  return (
+    <>
+      <Text style={globalStyles.titleText}>All Songs</Text>
+    </>
+  );
+};
 
-  render() {
-    return (
-      <>
-          <Text style={globalStyles.titleText}>All Songs</Text>
-      </>
-    );
-  }
-}
+export default PlayerScreen;
