@@ -31,7 +31,10 @@ const HomeScreen = ({navigation}) => {
     );
   }, []);
   // if homeScreen were a nested Component and soundlist (the datasource) were a property of that component
-  // we would added [songList] as a dependancy to tell React that we want to fire this hook only of songList had changed.
+  // we would added [songList] as a dependency to tell React that we want to fire this hook only if songList had changed.
+
+  // here songList is not a property of our component so we don't have to specify it as a dependency
+  // + an empty array is the appropriate behavior to retrieve the componentDidMount / componentWillUnmount paradigm of a class based component.
 
   if (!loading) {
     return (
