@@ -35,6 +35,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
     backgroundColor: '#FFF',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(40, 40, 40, .1)'
   },
   songInfos: {
     flexDirection: 'column',

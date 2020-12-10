@@ -41,8 +41,9 @@ const HomeScreen = ({navigation}) => {
       <>
         <View style={{
           flexDirection: "row",
-          height: 80,
-          padding: 20,
+          height: 65,
+          paddingTop: 20,
+          paddingLeft: 20
         }}>
           <Text style={globalStyles.titleText}>All Songs</Text>
         </View>
