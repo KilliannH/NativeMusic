@@ -12,8 +12,8 @@ const HomeScreen = ({navigation}) => {
 
   const componentDidMount = () => {
     console.log('did mount');
-    dataService.getAllSongs().then((songs) => {
-      setSongList(songs);
+    dataService.getSongs().then((result) => {
+      setSongList(result.content);
       setLoading(false);
     }).catch((e) => console.error(e));
   };
@@ -54,7 +54,7 @@ const HomeScreen = ({navigation}) => {
           <FlatList
             data={songList}
             renderItem={(data) => <SongCard song={data.item} navigation={navigation} />}
-            keyExtractor={(item) => item._id}
+            keyExtractor={(item) => item.title}
           />
         </View>
       </>

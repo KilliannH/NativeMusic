@@ -1,15 +1,21 @@
 import config from '../config.js';
-const api_url = `${config.API_PROTOCOL}://${config.API_HOST}:${config.API_PORT}/${config.API_ENDPOINT}`;
+
+import RNFetchBlob from 'react-native-fetch-blob';
+
+
+const api_url = `${config.API_PROTOCOL}://${config.API_HOST}/${config.API_ENDPOINT}`;
 
 module.exports = {
-  getAllSongs: () => {
-    return fetch(api_url + '/songs', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': config.API_SECRET,
-      },
+  getSongs: (limit) => {
+
+    // default number for getSongs()
+    if (!limit) {
+      limit = {};
+      limit.start = 0;
+      limit.end = 30;
+    }
+    return RNFetchBlob.config({trusty: true}).fetch('GET', api_url + `/songs/limit?start=${limit.start}&end=${limit.end}`, {
+      Authorization: config.API_SECRET,
     }).then((res) => res.json());
   },
 };

@@ -13,7 +13,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen';
 import DetailsScreen from './screens/DetailsScreen';
 import PlayerScreen from './screens/PlayerScreen';
-import {exp} from 'react-native-reanimated';
 
 const Stack = createStackNavigator();
 const appName = 'Native Music';
