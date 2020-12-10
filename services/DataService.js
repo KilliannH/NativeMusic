@@ -18,4 +18,11 @@ module.exports = {
       Authorization: config.API_SECRET,
     }).then((res) => res.json());
   },
+
+  getSong: (id) => {
+
+    return RNFetchBlob.config({trusty: true}).fetch('GET', api_url + `/songs/${id}`, {
+      Authorization: config.API_SECRET,
+    }).then((res) => res.json());
+  },
 };

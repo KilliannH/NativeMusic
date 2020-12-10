@@ -2,6 +2,8 @@
 import React from 'react';
 import { TouchableOpacity, Text, View, Image, StyleSheet } from 'react-native';
 
+import utils from '../constants/utils';
+
 const SongCard = ({song, navigation}) => {
 
   // todo -- impl when there is more than one album like render multiple albums...
@@ -11,18 +13,12 @@ const SongCard = ({song, navigation}) => {
     }
   };
 
-  let getArtists = () => {
-    let str = "";
-    song.artists.forEach((artist, i) => { i < song.artists.length -1 ? str += artist .name + ", " : str += artist .name;});
-    return str;
-  };
-
   return (
-  <TouchableOpacity style={{backgroundColor: 'transparent'}} onPress={() => navigation.navigate('Player', song._id)}>
+  <TouchableOpacity style={{backgroundColor: 'transparent'}} onPress={() => navigation.navigate('Player', { itemId: song.id }) }>
     <View style={styles.listItemContainer}>
       {getAlbums()}
       <View style={styles.songInfos}>
-        <Text>{getArtists()}</Text>
+        <Text>{utils.concatArtists(song)}</Text>
         <Text style={styles.itemHeader}>{song.title}</Text>
       </View>
     </View>
