@@ -1,28 +1,34 @@
 import config from '../config.js';
-
-import RNFetchBlob from 'react-native-fetch-blob';
-
+import axios from 'axios';
 
 const api_url = `${config.API_PROTOCOL}://${config.API_HOST}/${config.API_ENDPOINT}`;
 
+const instance = axios.create({
+  baseURL: api_url,
+  headers: {'Content-Type': 'application/json', Authorization: config.API_SECRET},
+  httpsAgent: {}
+});
+
 module.exports = {
   getSongs: (limit) => {
-
-    // default number for getSongs()
-    if (!limit) {
-      limit = {};
-      limit.start = 0;
-      limit.end = 30;
+    if(!limit) {
+      limit = {
+        start: 0,
+        end: 30
+      };
     }
-    return RNFetchBlob.config({trusty: true}).fetch('GET', api_url + `/songs/limit?start=${limit.start}&end=${limit.end}`, {
-      Authorization: config.API_SECRET,
-    }).then((res) => res.json());
+    return instance.get('/songs/limit?start=' + limit.start + '&end=' + limit.end).then((res) => {
+      if (res.status === 200) {
+        return res.data;
+      }
+    });
   },
 
   getSong: (id) => {
-
-    return RNFetchBlob.config({trusty: true}).fetch('GET', api_url + `/songs/${id}`, {
-      Authorization: config.API_SECRET,
-    }).then((res) => res.json());
+    return instance.get('/songs/' + id).then((res) => {
+      if (res.status === 200) {
+        return res.data;
+      }
+    });
   },
 };

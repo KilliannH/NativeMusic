@@ -2,6 +2,10 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, Image, StyleSheet, ActivityIndicator} from 'react-native';
 import * as dataService from '../services/DataService';
 import utils from '../constants/utils';
+import TrackPlayer from 'react-native-track-player';
+import config from '../config';
+
+const stream_url = `${config.API_PROTOCOL}://${config.API_HOST}/stream/`;
 
 const PlayerScreen = ({route}) => {
 
@@ -9,11 +13,32 @@ const PlayerScreen = ({route}) => {
   const [song, setSong] = useState({});
   const [loading, setLoading] = useState(true);
 
+  const trackPlayerInit =  () => {
+    return new Promise((resolve, reject) => {
+      return TrackPlayer.setupPlayer().then(() => {
+        TrackPlayer.add({
+          id: song.id.toString(),
+          url: stream_url + song.filename,
+          type: 'default',
+          title: song.title,
+          album: song.albums[0].title,
+          artist: utils.concatArtists(song),
+          artwork: song.albums[0].imageUrl,
+        });
+        return resolve({success: true});
+      }).catch((e) => reject(e));
+    });
+  };
+
   const componentDidMount = () => {
     console.log('did mount');
     dataService.getSong(itemId).then((result) => {
+      console.log(result);
       setSong(result);
-      setLoading(false);
+      trackPlayerInit().then(() => {
+        setLoading(false);
+        TrackPlayer.play();
+      });
     }).catch((e) => console.error(e));
   };
 
