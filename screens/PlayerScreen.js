@@ -14,20 +14,21 @@ const PlayerScreen = ({route}) => {
   const [loading, setLoading] = useState(true);
 
   const trackPlayerInit =  () => {
-    return new Promise((resolve, reject) => {
-      return TrackPlayer.setupPlayer().then(() => {
+    return TrackPlayer.setupPlayer().then((res) => {
+      console.log('setup player', res);
         TrackPlayer.add({
-          id: song.id.toString(),
+          headers: {'Authorization': config.API_SECRET},
+          id: 1,
           url: stream_url + song.filename,
           type: 'default',
           title: song.title,
           album: song.albums[0].title,
           artist: utils.concatArtists(song),
           artwork: song.albums[0].imageUrl,
+        }).then(() => {
+          TrackPlayer.play();
         });
-        return resolve({success: true});
-      }).catch((e) => reject(e));
-    });
+      }).catch((e) => console.error(e));
   };
 
   const componentDidMount = () => {
