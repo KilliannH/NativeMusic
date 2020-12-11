@@ -25,21 +25,21 @@ const appName = 'Native Music';
 // If you are using React.PureComponent you should make sure all child components are also pure.
 
 // So if we have a component that has an imunitable kind on props (string message for example)
-// then making it a pure cmponent shall increase performances
+// then making it a pure component shall increase performances
 // cf.https://medium.com/better-programming/when-to-use-react-purecomponent-723f85738be1
 
-export default class App extends React.Component {
-  render(): React$Node {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home"
-                         screenOptions={{title: appName}}>
-          <Stack.Screen name="Home"
-                        component={HomeScreen} />
-          <Stack.Screen name="Details" component={DetailsScreen} />
-          <Stack.Screen name="Player" component={PlayerScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  }
+const App: () => React$Node = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home"
+                       screenOptions={{title: appName}}>
+        <Stack.Screen name="Home"
+                      component={HomeScreen} />
+        <Stack.Screen name="Details" component={DetailsScreen} />
+        <Stack.Screen name="Player" component={PlayerScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 };
+
+export default App;
