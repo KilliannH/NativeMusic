@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import * as React from 'react';
 import {View, Text, Image, StyleSheet, ActivityIndicator} from 'react-native';
 import * as dataService from '../services/DataService';
 import utils from '../constants/utils';
@@ -7,71 +7,77 @@ import config from '../config';
 
 const stream_url = `${config.API_PROTOCOL}://${config.API_HOST}/stream/`;
 
-const PlayerScreen = ({route}) => {
+export default class PlayerScreen extends React.Component {
 
-  const { itemId } = route.params;
-  const [song, setSong] = useState({});
-  const [loading, setLoading] = useState(true);
+  constructor(props) {
+    super(props);
+    this.state = {
+      song: {},
+      loading: true
+    };
+  }
 
-  const trackPlayerInit =  () => {
-    return TrackPlayer.setupPlayer().then((res) => {
-      console.log('setup player', res);
-        TrackPlayer.add({
+  trackPlayerInit() {
+    const { song } = this.state;
+    if(song.filename) {
+      return TrackPlayer.setupPlayer().then(() => {
+        console.log('setup player', stream_url + song.filename);
+        return TrackPlayer.add({
           headers: {'Authorization': config.API_SECRET},
-          id: 1,
+          id: song.id.toString(),
           url: stream_url + song.filename,
           type: 'default',
           title: song.title,
           album: song.albums[0].title,
           artist: utils.concatArtists(song),
           artwork: song.albums[0].imageUrl,
-        }).then(() => {
-          TrackPlayer.play();
-        });
-      }).catch((e) => console.error(e));
-  };
+        }).catch((e) => console.error(e));
+      });
+    }
+  }
 
-  const componentDidMount = () => {
-    console.log('did mount');
-    dataService.getSong(itemId).then((result) => {
-      console.log(result);
-      setSong(result);
-      trackPlayerInit().then(() => {
-        setLoading(false);
-        TrackPlayer.play();
+  afterInit() {
+    //TrackPlayer.play();
+  }
+
+  componentDidMount() {
+    const { route } = this.props;
+    const { itemId } = route.params;
+    return dataService.getSong(itemId).then((result) => {
+      this.setState({song: result});
+      return this.trackPlayerInit().then(() => {
+        this.setState({loading: false});
+        console.log("song added");
+        return this.afterInit();
       });
     }).catch((e) => console.error(e));
-  };
-
-  const componentWillUnmount = () => {
-    setSong({});
-    setLoading(true);
-  };
-
-  useEffect(() => {
-    console.log('use effect fired');
-    componentDidMount();
-    return (
-      componentWillUnmount()
-    );
-  }, []);
-
-  if (!loading) {
-    return (
-      <View style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}>
-        <Text style={styles.songTitle}>{song.title}</Text>
-        <Text style={styles.songArtists}>{utils.concatArtists(song)}</Text>
-        <Image source={{uri: song.albums[0].imageUrl}} style={styles.albumImage} />
-      </View>
-    );
-  } else {
-    return <ActivityIndicator />;
   }
-};
+
+  componentWillUnmount() {
+    console.log('player will unmount');
+    this.setState({song: {}, loading: true});
+  }
+
+  render() {
+    const {song, loading} = this.state;
+    if (!loading) {
+      return (
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <Text style={styles.songTitle}>{song.title}</Text>
+          <Text style={styles.songArtists}>{utils.concatArtists(song)}</Text>
+          <Image source={{uri: song.albums[0].imageUrl}} style={styles.albumImage} />
+        </View>
+      );
+    } else {
+      return <ActivityIndicator />;
+    }
+  }
+
+}
 
 const styles = StyleSheet.create({
   songTitle: {
@@ -92,5 +98,3 @@ const styles = StyleSheet.create({
     width: 300
   }
 });
-
-export default PlayerScreen;

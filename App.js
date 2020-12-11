@@ -28,18 +28,18 @@ const appName = 'Native Music';
 // then making it a pure cmponent shall increase performances
 // cf.https://medium.com/better-programming/when-to-use-react-purecomponent-723f85738be1
 
-const App: () => React$Node = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home"
-                       screenOptions={{title: appName}}>
-        <Stack.Screen name="Home"
-                      component={HomeScreen} />
-        <Stack.Screen name="Details" component={DetailsScreen} />
-        <Stack.Screen name="Player" component={PlayerScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+export default class App extends React.Component {
+  render(): React$Node {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Home"
+                         screenOptions={{title: appName}}>
+          <Stack.Screen name="Home"
+                        component={HomeScreen} />
+          <Stack.Screen name="Details" component={DetailsScreen} />
+          <Stack.Screen name="Player" component={PlayerScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
 };
-
-export default App;
